@@ -1,7 +1,8 @@
 import json
-import sys  # sys нужен для передачи argv в QApplication
+import sys
 import importlib.util
 import os
+
 from PyQt5 import QtWidgets, QtCore, uic
 from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QVBoxLayout, QHBoxLayout, QRadioButton, QComboBox
 
@@ -37,24 +38,22 @@ class FrameMenu(QtWidgets.QFrame):
         self.radioButtonAttackDefense.resize(150,20)
         self.radioButtonAttackDefense.clicked.connect(self.radioClicked)
 
-        hbox = QHBoxLayout()
-        self.groupBoxParameters.setLayout(hbox)
-
-        vbox = QVBoxLayout()
-        hbox.addLayout(vbox)
         self.extraParamsLayout = QVBoxLayout()
-        hbox.addLayout(self.extraParamsLayout)
-        
+
+        vbox = QVBoxLayout()    
         vbox.addWidget(self.radioButtonStandard)
         vbox.addWidget(self.radioButtonAttack)
         vbox.addWidget(self.radioButtonAttackDefense)
 
+        hbox = QHBoxLayout()
+        hbox.addLayout(vbox)
+        hbox.addLayout(self.extraParamsLayout)
+        self.groupBoxParameters.setLayout(hbox)
         
         self.load_modules()
 
     def addParameter(self, parameter:QWidget):
         self.extraParamsLayout.addWidget(parameter)
-        #self.groupBoxParameters.resize(self.groupBoxParameters.frameGeometry().width(), self.groupBoxParameters.frameGeometry().height() + 20 )
         
 
     def radioClicked(self):
@@ -112,14 +111,23 @@ class FrameMenu(QtWidgets.QFrame):
 
         spec = importlib.util.spec_from_file_location(current_module["moduleName"], modulePath)
         module = importlib.util.module_from_spec(spec)
+
         sys.modules[current_module["moduleName"]] = module
         spec.loader.exec_module(module)
-        for param in module.addParams():
-            self.addParameter(param)
+
+        for i in reversed(range(self.extraParamsLayout.count())): 
+            self.extraParamsLayout.itemAt(i).widget().setParent(None)
+        try:
+            for param in module.addParams():
+                self.addParameter(param)
+        except:
+            pass
+
 
                 
     def getModule(self):
         return self.currentModule
+
     def getModuleByName(self, name):
         for module in self.modules:
             if module["moduleName"] == name:
@@ -139,7 +147,7 @@ class DemonstrationApp(QtWidgets.QMainWindow):
         super().__init__()
         
         self.setWindowTitle("Демонстрационный стенд \"Искусственный интеллект\"")
-        self.resize(1000, 850)
+        self.resize(1000, 800)
         self.openMenu()
 
     def openMenu(self):
@@ -159,7 +167,7 @@ class DemonstrationApp(QtWidgets.QMainWindow):
         cm = module.Module(
                 parent = self,
                 demonstration_type = self.frameMenu.parameters["demonstration_type"], 
-                slides = current_module["slides"]["normal"] + 1, 
+                slides = current_module["slides"]["normal"], 
                 parameters = self.frameMenu.parameters
         )
 
