@@ -16,6 +16,9 @@ class FrameMenu(QtWidgets.QFrame):
 
         self.currentModule = None
         self.modules = []
+        with open(os.path.join("modules", "categories.conf"), "r", encoding="utf-8") as file:
+            self.categories = json.load(file)
+            print(self.categories)
 
         self.parameters = {
             "demonstration_type" : "normal"
@@ -23,7 +26,8 @@ class FrameMenu(QtWidgets.QFrame):
 
         self.pushButtonStart.clicked.connect(startFunc)
 
-        
+        self.groupBoxParameters.hide()
+        self.pushButtonStart.hide()
 
         self.radioButtonStandard = QRadioButton("Обычный режим")
         self.radioButtonStandard.resize(150,20)
@@ -50,6 +54,8 @@ class FrameMenu(QtWidgets.QFrame):
         hbox.addLayout(self.extraParamsLayout)
         self.groupBoxParameters.setLayout(hbox)
         
+
+
         self.load_modules()
 
     def addParameter(self, parameter:QWidget):
@@ -74,7 +80,10 @@ class FrameMenu(QtWidgets.QFrame):
         
         categories = dict()
         for module in os.listdir(modulesDir):
+            
             moduleDir = os.path.join(modulesDir, module)
+            if not os.path.isdir(moduleDir):
+                continue
             with open(os.path.join(moduleDir, "module.conf"), "r", encoding="utf-8") as file:
                 confData = json.load(file)
                 self.modules.append(confData)
@@ -91,39 +100,55 @@ class FrameMenu(QtWidgets.QFrame):
 
             self.treeWidgetModules.addTopLevelItem(twCategory)
 
+        
+
         self.treeWidgetModules.expandAll()
         self.treeWidgetModules.itemClicked.connect(self.select_module)
            
     @QtCore.pyqtSlot(QTreeWidgetItem, int)
     def select_module(self, item, column):
-        module = self.getModuleByName(item.text(column))
-        if module is None:
+        
+        category = self.getCategoryByName( item.text(column))
+        if category is not None:
+            self.pushButtonStart.hide()
+            self.groupBoxParameters.hide()
+            self.labelModuleName.setText(category["categoryName"])
+            self.labelModuleDescription.setText(category["description"])
             return
-        self.labelModuleName.setText(module["moduleName"])
-        self.labelModuleDescription.setText(module["description"])
-        self.currentModule = module
-        self.pushButtonStart.setEnabled(True)
+
+        module = self.getModuleByName(item.text(column))
+        if module is not None:           
+
+            self.pushButtonStart.setEnabled(True)
+            self.pushButtonStart.show()
+            self.groupBoxParameters.show()
+
+            self.labelModuleName.setText(module["moduleName"])
+            self.labelModuleDescription.setText(module["description"])
+            self.currentModule = module
+            
+            current_module = module
+            modulePath = os.path.join(os.getcwd(), "modules", current_module["moduleName"], current_module["scriptPath"])
+
+            spec = importlib.util.spec_from_file_location(current_module["moduleName"], modulePath)
+            module = importlib.util.module_from_spec(spec)
+
+            sys.modules[current_module["moduleName"]] = module
+            spec.loader.exec_module(module)
+
+            for i in reversed(range(self.extraParamsLayout.count())): 
+                self.extraParamsLayout.itemAt(i).widget().setParent(None)
+            try:
+                for param in module.addParams():
+                    self.addParameter(param)
+            except:
+                pass
 
 
-
-        current_module = self.currentModule
-        modulePath = os.path.join(os.getcwd(), "modules", current_module["moduleName"], current_module["scriptPath"])
-
-        spec = importlib.util.spec_from_file_location(current_module["moduleName"], modulePath)
-        module = importlib.util.module_from_spec(spec)
-
-        sys.modules[current_module["moduleName"]] = module
-        spec.loader.exec_module(module)
-
-        for i in reversed(range(self.extraParamsLayout.count())): 
-            self.extraParamsLayout.itemAt(i).widget().setParent(None)
-        try:
-            for param in module.addParams():
-                self.addParameter(param)
-        except:
-            pass
-
-
+    def getCategoryByName(self, name):
+        for category in self.categories:
+            if category["categoryName"] == name:
+                return category
                 
     def getModule(self):
         return self.currentModule
