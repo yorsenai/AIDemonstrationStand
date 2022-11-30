@@ -1,4 +1,4 @@
-import SuperModule as SM
+import common.lib.SuperModule as SM
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 
@@ -6,8 +6,14 @@ class SignDialog(object):
     def setupUi(self, Dialog, overall_path : str, atk : str):
         Dialog.setObjectName("Dialog")
         Dialog.resize(880, 820)
+
+        self.labelDataSet = QtWidgets.QLabel(Dialog)
+        self.labelDataSet.setGeometry(QtCore.QRect(110, 5, 80, 20))
+        self.labelDataSet.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelDataSet.setObjectName("label")
+
         self.frameSTOP = QtWidgets.QFrame(Dialog)
-        self.frameSTOP.setGeometry(QtCore.QRect(10, 10, 400, 360))
+        self.frameSTOP.setGeometry(QtCore.QRect(10, 30, 400, 360))
         self.frameSTOP.setMinimumSize(QtCore.QSize(400, 360))
         self.frameSTOP.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frameSTOP.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -42,7 +48,7 @@ class SignDialog(object):
 
 
         self.frameSPEED = QtWidgets.QFrame(Dialog)
-        self.frameSPEED.setGeometry(QtCore.QRect(470, 10, 400, 360))
+        self.frameSPEED.setGeometry(QtCore.QRect(470, 30, 400, 360))
         self.frameSPEED.setMinimumSize(QtCore.QSize(400, 360))
         self.frameSPEED.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frameSPEED.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -61,7 +67,11 @@ class SignDialog(object):
         self.imageSPEED3 = QtWidgets.QLabel(self.frameSPEED)
         self.imageSPEED3.setGeometry(QtCore.QRect(210, 10, 180, 160))
         self.imageSPEED3.setObjectName("imageSPEED3")
-        self.imageSPEED3.setPixmap(QtGui.QPixmap(overall_path + "\\speed3" + atk + ".png").scaled(180, 160))
+        if atk == "attack":
+            self.imageSPEED3.setStyleSheet("border: 5px solid red;")
+            self.imageSPEED3.setPixmap(QtGui.QPixmap(overall_path + "\\speed3_atk.png").scaled(180, 160))
+        else:
+            self.imageSPEED3.setPixmap(QtGui.QPixmap(overall_path + "\\speed3.png").scaled(180, 160))
 
         self.imageSPEED4 = QtWidgets.QLabel(self.frameSPEED)
         self.imageSPEED4.setGeometry(QtCore.QRect(210, 190, 180, 160))
@@ -72,7 +82,6 @@ class SignDialog(object):
         self.labelSpeed.setGeometry(QtCore.QRect(580, 380, 160, 20))
         self.labelSpeed.setAlignment(QtCore.Qt.AlignCenter)
         self.labelSpeed.setObjectName("labelSpeed")
-
 
 
 
@@ -155,6 +164,7 @@ class SignDialog(object):
         self.labelSpeed.setText(_translate("Dialog", "ОГРАНИЧЕНИЕ СКОРОСТИ"))
         self.labelCross.setText(_translate("Dialog", "ПЕШЕХОДНЫЙ ПЕРЕХОД"))
         self.labelParking.setText(_translate("Dialog", "ПАРКОВКА ЗАПРЕЩЕНА"))
+        self.labelDataSet.setText(_translate("Dialog", "Обучающий ДатаСет"))
 
 
 
@@ -166,7 +176,6 @@ class Module(SM.SuperModule):
         self.changePicture(os.path.join(self.cwd, "pics", "speed3_atk.png"))
 
         self.showSlide()
-    
 
     def executeAction(self, action):
         super().executeAction(action)
@@ -178,8 +187,13 @@ class Module(SM.SuperModule):
     def ExecuteDemoDialog(self, in_data : str):
         dialog_app = QtWidgets.QDialog()
         DialogWindow = SignDialog()
-        if in_data == "attack":
-            DialogWindow.setupUi(dialog_app, self.cwd + "\\pics", "_atk")
-        else:
-            DialogWindow.setupUi(dialog_app, self.cwd + "\\pics", "")
+        DialogWindow.setupUi(dialog_app, self.cwd + "\\pics", in_data)
         dialog_app.exec()
+    
+
+    def showResult(self):
+        if self.demonstration_type == "attack":
+            self.changeScriptText("(Ограничение скорости)")
+        else:
+            self.changeScriptText("(Стоп)")
+        

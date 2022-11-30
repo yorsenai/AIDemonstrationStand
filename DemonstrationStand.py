@@ -6,19 +6,18 @@ import os
 from PyQt5 import QtWidgets, QtCore, uic
 from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QVBoxLayout, QHBoxLayout, QRadioButton, QComboBox
 
-
+from common.lib.CallMessageBox import CallMessageBox
 
 
 class FrameMenu(QtWidgets.QFrame):
     def __init__(self, startFunc):
         super().__init__()
-        uic.loadUi(os.path.join('ui', 'frameMenu.ui'), self)
+        uic.loadUi(os.path.join('common\\ui', 'frameMenu.ui'), self)
 
         self.currentModule = None
         self.modules = []
-        with open(os.path.join("modules", "categories.conf"), "r", encoding="utf-8") as file:
+        with open(os.path.join("common", "categories.conf"), "r", encoding="utf-8") as file:
             self.categories = json.load(file)
-            print(self.categories)
 
         self.parameters = {
             "demonstration_type" : "normal"
@@ -30,16 +29,16 @@ class FrameMenu(QtWidgets.QFrame):
         self.pushButtonStart.hide()
 
         self.radioButtonStandard = QRadioButton("Обычный режим")
-        self.radioButtonStandard.resize(150,20)
+        self.radioButtonStandard.resize(150,25)
         self.radioButtonStandard.clicked.connect(self.radioClicked)
         self.radioButtonStandard.setChecked(True)
 
         self.radioButtonAttack = QRadioButton("Атака")
-        self.radioButtonAttack.resize(150,20)
+        self.radioButtonAttack.resize(150,25)
         self.radioButtonAttack.clicked.connect(self.radioClicked)
 
         self.radioButtonAttackDefense = QRadioButton("Атака + Защита")
-        self.radioButtonAttackDefense.resize(150,20)
+        self.radioButtonAttackDefense.resize(150,25)
         self.radioButtonAttackDefense.clicked.connect(self.radioClicked)
 
         self.extraParamsLayout = QVBoxLayout()
@@ -54,8 +53,6 @@ class FrameMenu(QtWidgets.QFrame):
         hbox.addLayout(self.extraParamsLayout)
         self.groupBoxParameters.setLayout(hbox)
         
-
-
         self.load_modules()
 
     def addParameter(self, parameter:QWidget):
@@ -73,7 +70,7 @@ class FrameMenu(QtWidgets.QFrame):
     def load_modules(self):
         cwd = os.getcwd()
         if "modules" not in os.listdir(cwd):
-            print("Папка с модулями не найдена")
+            CallMessageBox("Папка с модулями не найдена!")
             return False
         
         modulesDir = os.path.join(cwd, "modules")
@@ -99,8 +96,7 @@ class FrameMenu(QtWidgets.QFrame):
                 twCategory.addChild(QTreeWidgetItem([module["moduleName"]]))
 
             self.treeWidgetModules.addTopLevelItem(twCategory)
-
-        
+  
 
         self.treeWidgetModules.expandAll()
         self.treeWidgetModules.itemClicked.connect(self.select_module)
@@ -108,7 +104,7 @@ class FrameMenu(QtWidgets.QFrame):
     @QtCore.pyqtSlot(QTreeWidgetItem, int)
     def select_module(self, item, column):
         
-        category = self.getCategoryByName( item.text(column))
+        category = self.getCategoryByName(item.text(column))
         if category is not None:
             self.pushButtonStart.hide()
             self.groupBoxParameters.hide()
@@ -196,7 +192,7 @@ class DemonstrationApp(QtWidgets.QMainWindow):
                 parameters = self.frameMenu.parameters
         )
 
-        #ПОТОМ НАДО ВСЕ ЭТО В parameters ЗАПИХНУТЬ 
+        # ПОТОМ НАДО ВСЕ ЭТО В parameters ЗАПИХНУТЬ 
         # составляющие parameters свои для каждого preview класса
         self.setCentralWidget(cm.demoFrame)
         

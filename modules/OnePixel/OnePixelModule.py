@@ -1,4 +1,4 @@
-import SuperModule as SM
+import common.lib.SuperModule as SM
 from PyQt5.QtWidgets import QComboBox
 
 from PIL import Image
@@ -19,7 +19,6 @@ def onepixattack(image : str):
 
 
 		im.close()
-		#new_name = image[7 : image.find(".p")]
 		new_name = image.replace(".png", "")
 		img.save(new_name + "_out.png", "PNG")
 		img.close()
@@ -62,3 +61,12 @@ class Module(SM.SuperModule):
         except:
             if onepixattack(self.cwd + "pics\\собака.png"):
                 self.changePicture(self.cwd  + "pics\\собака_out.png")
+    
+    def showResult(self):
+        if self.demonstration_type == "attack":
+            l = ["собака", "птица", "кошка", "лошадь"]
+            l.remove(self.parameters['param0'])
+            self.changeScriptText("(" + l[0] + ")")
+
+        else:
+            self.changeScriptText("(" + self.parameters['param0'] + ")")

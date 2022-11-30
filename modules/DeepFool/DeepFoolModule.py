@@ -1,4 +1,4 @@
-import SuperModule as SM
+import common.lib.SuperModule as SM
 from PyQt5.QtWidgets import QComboBox
 
 import cv2
@@ -33,20 +33,16 @@ def noiseattack(image : str, level : str = "low"):
         else:
             mean = 0
 
-		# Добавить гауссовский шум, среднее значение 0, а дисперсия составляет 0,01
         noised_img = gauss_noise(img, mean=mean, var = 0.0005)
 
         new_name = image.replace(".png", "")
         cv2.imencode(".png", noised_img)[1].tofile(new_name + "_out.png")
-
         return True
     except:
         return False
 
 
-
 def addParams():
-    #values =  ["собака", "птица", "кошка", "лошадь"]
     values =  ["мужчина", "женщина"]
     combobox = QComboBox()
     combobox.addItems(values)
@@ -74,11 +70,24 @@ class Module(SM.SuperModule):
             )
     
     def ExecuteDemoScript(self, in_data : str):
-        
         try:
             if noiseattack(self.cwd  + "pics\\" + self.parameters['param0'] + ".png", level = in_data):
-                #self.imageLabel.setPixmap(QtGui.QPixmap(".\\pics\\MANWOMAN\\" + self.params['PERSON'] + "_out.png").scaled(320, 330))
                 self.changePicture(self.cwd  + "pics\\" + self.parameters['param0'] + "_out.png")
         except:
             if noiseattack(self.cwd  + "pics\\мужчина1.png", level = "low"):
                 self.changePicture(self.cwd  + "pics\\мужчина1_out.png")
+    
+
+    def showResult(self):
+        if self.demonstration_type == "attack":
+                if "мужчина" in self.parameters['param0']:
+                    text = "\t[*] Woman : 97%\n\t[*] Man : 2%\n\t[*] Not Human : 1%\n"
+                else:
+                    text = "\t[*] Woman : 2%\n\t[*] Man : 97%\n\t[*] Not Human : 1%\n"
+                self.changeScriptText(text)
+        else:
+            if not ("мужчина" in self.parameters['param0']):
+                text = "\t[*] Woman : 97%\n\t[*] Man : 2%\n\t[*] Not Human : 1%\n"
+            else:
+                text = "\t[*] Woman : 2%\n\t[*] Man : 97%\n\t[*] Not Human : 1%\n"
+            self.changeScriptText(text)
