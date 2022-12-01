@@ -1,3 +1,4 @@
+import os
 import common.lib.SuperModule as SM
 from PyQt5.QtWidgets import QComboBox
 
@@ -39,11 +40,11 @@ class Module(SM.SuperModule):
     def __init__(self, demonstration_type : str, slides, parent = None, parameters = None) -> None:
         super().__init__(demonstration_type = demonstration_type, slides = slides, parent = parent, parameters = parameters)
         self.parameters["param0"]
-        self.cwd = ".\\modules\\OnePixel\\"
+        self.cwd = os.path.join("modules", "OnePixel")
         try:
-            self.changePicture(self.cwd + "pics\\" + self.parameters["param0"] + ".png")
+            self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param0"] + ".png"))
         except:
-            self.changePicture(self.cwd + "pics\\собака.png")
+            self.changePicture(os.path.join(self.cwd,  "pics", "собака.png"))
         self.showSlide()
     
 
@@ -56,11 +57,11 @@ class Module(SM.SuperModule):
     
     def ExecuteDemoScript(self, in_data : str):
         try:
-            if onepixattack(self.cwd + "pics\\" + self.parameters["param0"] + ".png"):
-                self.changePicture(self.cwd  + "pics\\" + self.parameters["param0"] + "_out.png")
+            if onepixattack(os.path.join(self.cwd,  "pics", self.parameters["param0"] + ".png")):
+                self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param0"] + "_out.png"))
         except:
-            if onepixattack(self.cwd + "pics\\собака.png"):
-                self.changePicture(self.cwd  + "pics\\собака_out.png")
+            if onepixattack(os.path.join(self.cwd,  "pics", "собака.png")):
+                self.changePicture(os.path.join(self.cwd,  "pics", "собака_out.png"))
     
     def showResult(self):
         if self.demonstration_type == "attack":
@@ -71,3 +72,8 @@ class Module(SM.SuperModule):
         else:
             #self.changeScriptText(self.parameters['param0'])
             self.ScriptTextPlate.insertPlainText(self.parameters['param0'])
+
+    def cleanup(self):
+        for filename in os.listdir(os.path.join(self.cwd, "pics")):
+            if "_out.png" in filename:
+                os.remove(os.path.join(self.cwd, "pics", filename))

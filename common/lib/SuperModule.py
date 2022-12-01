@@ -10,9 +10,9 @@ import json
 class SuperModule(QFrame):
     def __init__(self, demonstration_type : str, slides : int, parent = None, parameters = None):
         super().__init__()
-        loadUi(os.path.join('common\\ui', 'frameDemo.ui'), self)
+        loadUi(os.path.join('common', 'ui', 'frameDemo.ui'), self)
 
-        self.cwd = ".\\"
+        self.cwd = os.getcwd()
         self.parent = parent
         self.demonstration_type = demonstration_type # normal || attack || protect
         self.max_slides = slides #Возможно потом не понадобится
@@ -36,7 +36,8 @@ class SuperModule(QFrame):
                 self.current_slide + 1)
         elif 'Назад' in button.text():
             self.current_slide = max(1, self.current_slide - 1)
-        else:     #Меню или Завершить       
+        else:     #Меню или Завершить     
+            self.cleanup()  
             self.parent.openMenu()
             return
         self.showSlide()
@@ -79,4 +80,7 @@ class SuperModule(QFrame):
                 action['MessageBox']
             )
     def showResult(self):
+        pass
+
+    def cleanup(self):
         pass

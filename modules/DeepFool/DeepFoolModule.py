@@ -1,3 +1,4 @@
+import os
 import common.lib.SuperModule as SM
 from PyQt5.QtWidgets import QComboBox
 
@@ -53,12 +54,12 @@ class Module(SM.SuperModule):
         super().__init__(demonstration_type = demonstration_type, slides = slides, parent = parent, parameters = parameters)
         self.parameters["param0"] += str(randint(1, 3))
 
-        self.cwd = ".\\modules\\DeepFool\\"
+        self.cwd = os.path.join("modules", "DeepFool")
         
         try:
-            self.changePicture(self.cwd + "pics\\" + self.parameters["param0"] + ".png")
+            self.changePicture(os.path.join(self.cwd, "pics", self.parameters["param0"] + ".png"))
         except:
-            self.changePicture(self.cwd + "pics\\мужчина1.png")
+            self.changePicture(os.path.join(self.cwd, "pics", "мужчина1.png"))
         self.showSlide()
     
 
@@ -71,11 +72,11 @@ class Module(SM.SuperModule):
     
     def ExecuteDemoScript(self, in_data : str):
         try:
-            if noiseattack(self.cwd  + "pics\\" + self.parameters['param0'] + ".png", level = in_data):
-                self.changePicture(self.cwd  + "pics\\" + self.parameters['param0'] + "_out.png")
+            if noiseattack(os.path.join(self.cwd, "pics", self.parameters["param0"] + ".png"), level = in_data):
+                self.changePicture(os.path.join(self.cwd, "pics", self.parameters["param0"] + "_out.png"))
         except:
-            if noiseattack(self.cwd  + "pics\\мужчина1.png", level = "low"):
-                self.changePicture(self.cwd  + "pics\\мужчина1_out.png")
+            if noiseattack(os.path.join(self.cwd, "pics", "мужчина1.png"), level = "low"):
+                self.changePicture(os.path.join(self.cwd, "pics", "мужчина1_out.png"))
     
 
     def showResult(self):
@@ -92,3 +93,8 @@ class Module(SM.SuperModule):
             else:
                 text = "\t[*] Woman : 2%\n\t[*] Man : 97%\n\t[*] Not Human : 1%\n"
             self.changeScriptText(text)
+
+    def cleanup(self):
+        for filename in os.listdir(os.path.join(self.cwd, "pics")):
+            if "_out.png" in filename:
+                os.remove(os.path.join(self.cwd, "pics", filename))

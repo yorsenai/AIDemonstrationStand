@@ -4,7 +4,8 @@ import importlib.util
 import os
 
 from PyQt5 import QtWidgets, QtCore, uic
-from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QVBoxLayout, QHBoxLayout, QRadioButton, QComboBox
+from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, QVBoxLayout, QHBoxLayout, QRadioButton, QComboBox, QFileIconProvider
+from PyQt5.QtGui import QIcon
 
 from common.lib.CallMessageBox import CallMessageBox
 
@@ -168,6 +169,17 @@ class DemonstrationApp(QtWidgets.QMainWindow):
         super().__init__()
         
         self.setWindowTitle("Демонстрационный стенд \"Искусственный интеллект\"")
+
+        try:
+            # Включите в блок try/except, если вы также нацелены на Mac/Linux
+            from PyQt5.QtWinExtras import QtWin                                         #  !!!
+            myappid = 'ic.demostand.subproduct.1'                                       #  !!!
+            QtWin.setCurrentProcessExplicitAppUserModelID(myappid)                      #  !!!    
+        except ImportError:
+            pass
+        self.setWindowIcon(QIcon(os.path.join("common", "icon.png"))) # Иконка перед названием окна
+
+
         self.resize(1000, 800)
         self.openMenu()
 
