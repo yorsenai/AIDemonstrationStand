@@ -8,9 +8,14 @@ class SignDialog(object):
         Dialog.resize(880, 820)
 
         self.labelDataSet = QtWidgets.QLabel(Dialog)
-        self.labelDataSet.setGeometry(QtCore.QRect(110, 5, 80, 20))
+        self.labelDataSet.setGeometry(QtCore.QRect(280, 5, 320, 30))
         self.labelDataSet.setAlignment(QtCore.Qt.AlignCenter)
         self.labelDataSet.setObjectName("label")
+        myFont=QtGui.QFont()
+        myFont.setBold(True)
+        myFont.setPointSize(14)
+        self.labelDataSet.setFont(myFont)
+
 
         self.frameSTOP = QtWidgets.QFrame(Dialog)
         self.frameSTOP.setGeometry(QtCore.QRect(10, 30, 400, 360))
@@ -116,7 +121,7 @@ class SignDialog(object):
 
 
         self.labelCross = QtWidgets.QLabel(Dialog)
-        self.labelCross.setGeometry(QtCore.QRect(620, 790, 160, 20))
+        self.labelCross.setGeometry(QtCore.QRect(580, 770, 160, 20))
         self.labelCross.setAlignment(QtCore.Qt.AlignCenter)
         self.labelCross.setObjectName("labelCross")
 
@@ -149,7 +154,7 @@ class SignDialog(object):
         self.imagePARKING4.setPixmap(QtGui.QPixmap(overall_path + "\\parking4.png").scaled(180, 160))
 
         self.labelParking = QtWidgets.QLabel(Dialog)
-        self.labelParking.setGeometry(QtCore.QRect(170, 790, 160, 20))
+        self.labelParking.setGeometry(QtCore.QRect(170, 770, 160, 20))
         self.labelParking.setAlignment(QtCore.Qt.AlignCenter)
         self.labelParking.setObjectName("labelParking")
 
@@ -160,11 +165,11 @@ class SignDialog(object):
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.label.setText(_translate("Dialog", "СТОП"))
+        self.label.setText(_translate("Dialog", "ЗНАК СТОП"))
         self.labelSpeed.setText(_translate("Dialog", "ОГРАНИЧЕНИЕ СКОРОСТИ"))
         self.labelCross.setText(_translate("Dialog", "ПЕШЕХОДНЫЙ ПЕРЕХОД"))
         self.labelParking.setText(_translate("Dialog", "ПАРКОВКА ЗАПРЕЩЕНА"))
-        self.labelDataSet.setText(_translate("Dialog", "Обучающий ДатаСет"))
+        self.labelDataSet.setText(_translate("Dialog", "Обучающий набор данных"))
 
 
 
@@ -193,7 +198,9 @@ class Module(SM.SuperModule):
 
     def showResult(self):
         if self.demonstration_type == "attack":
-            self.changeScriptText("(Ограничение скорости)")
+            self.ScriptTextPlate.insertPlainText("Знак Ограничение скорости")
+            #self.changeScriptText("(Ограничение скорости)")
         else:
-            self.changeScriptText("(Стоп)")
+            self.ScriptTextPlate.insertPlainText("Знак Стоп")
+            #self.changeScriptText("(Стоп)")
         

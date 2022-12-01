@@ -18,6 +18,9 @@ class SuperModule(QFrame):
         self.max_slides = slides #Возможно потом не понадобится
         self.parameters = parameters
 
+        self.InfoTextPlate.setReadOnly(True)
+        self.ScriptTextPlate.setReadOnly(True)
+
         self.current_slide = 1
 
         self.pushButtonMenu.clicked.connect(lambda state = True, 
@@ -68,6 +71,7 @@ class SuperModule(QFrame):
     def changeScriptText(self, text : str):
         if(self.ScriptTextPlate.toPlainText().find(text) < 0):
             self.ScriptTextPlate.append(text)
+            #self.ScriptTextPlate.insertPlainText(text)
     
     def executeAction(self, action):
         if action.get('MessageBox'):

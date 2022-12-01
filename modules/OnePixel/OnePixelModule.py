@@ -66,7 +66,8 @@ class Module(SM.SuperModule):
         if self.demonstration_type == "attack":
             l = ["собака", "птица", "кошка", "лошадь"]
             l.remove(self.parameters['param0'])
-            self.changeScriptText("(" + l[0] + ")")
-
+            #self.changeScriptText("(" + l[0] + ")")
+            self.ScriptTextPlate.insertPlainText(l[0])
         else:
-            self.changeScriptText("(" + self.parameters['param0'] + ")")
+            #self.changeScriptText(self.parameters['param0'])
+            self.ScriptTextPlate.insertPlainText(self.parameters['param0'])

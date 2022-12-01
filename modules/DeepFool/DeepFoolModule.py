@@ -85,6 +85,7 @@ class Module(SM.SuperModule):
                 else:
                     text = "\t[*] Woman : 2%\n\t[*] Man : 97%\n\t[*] Not Human : 1%\n"
                 self.changeScriptText(text)
+
         else:
             if not ("мужчина" in self.parameters['param0']):
                 text = "\t[*] Woman : 97%\n\t[*] Man : 2%\n\t[*] Not Human : 1%\n"
