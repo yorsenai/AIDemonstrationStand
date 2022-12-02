@@ -88,6 +88,8 @@ class FrameMenu(QtWidgets.QFrame):
                 if confData["moduleCategory"] not in categories.keys():
                     categories[confData["moduleCategory"]] = []
                 categories[confData["moduleCategory"]].append(confData)
+        # print(categories.keys())
+        # categories
 
         
         
@@ -136,6 +138,9 @@ class FrameMenu(QtWidgets.QFrame):
             for i in reversed(range(self.extraParamsLayout.count())): 
                 self.extraParamsLayout.itemAt(i).widget().setParent(None)
             try:
+                label = QtWidgets.QLabel()
+                label.setText("Входные данные:")
+                self.addParameter(label)
                 for param in module.addParams():
                     self.addParameter(param)
             except:

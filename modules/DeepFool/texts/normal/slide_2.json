@@ -3,5 +3,7 @@
 
     "script": "[+] CONVOLUTIONAL LAYER: Collecting and analysing data...",
 
-    "action": {}
+    "action": {
+        "DialogWindow" : "_"
+    }
 }
