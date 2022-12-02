@@ -4,7 +4,7 @@
     "script": "[!] CONVOLUTIONIAL LAYER: Exceptioanal data fixed.\n[+] CONVOLUTIONAL LAYER: Collecting and analysing data...\n[+] ACTIVATION LAYER: Analysing layer data...",
 
     "action": {
-        "MessageBox": "Auto Noise Reduction System found exceptional noise. Trying to fix...\n",
+        "MessageBox": "Система защиты автоподавления шумов обнаружила искажения во входных данных. Попытка починки...\n",
 
         "Script": "low\n"
     }

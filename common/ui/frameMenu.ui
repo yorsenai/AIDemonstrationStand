@@ -39,7 +39,7 @@
     </property>
     <column>
      <property name="text">
-      <string>Категории</string>
+      <string>Угрозы</string>
      </property>
     </column>
    </widget>
@@ -177,7 +177,7 @@
        </rect>
       </property>
       <property name="title">
-       <string>Параметры</string>
+       <string> Параметры сценария и входные данные</string>
       </property>
      </widget>
     </widget>

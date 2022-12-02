@@ -4,7 +4,7 @@
     "script": "[+] CONVOLUTIONAL LAYER: Collecting and analysing data...",
 
     "action": {
-        "MessageBox": "███    ██  ██████  ██ ███████ ███████ \n████   ██ ██    ██ ██ ██      ██      \n██ ██  ██ ██    ██ ██ ███████ █████   \n██  ██ ██ ██    ██ ██      ██ ██      \n██   ████  ██████  ██ ███████ ███████ \n",
+        "MessageBox": "ВХОДНОЕ ИЗОБРАЖЕНИЕ АТАКОВАНО МЕТОДОМ DEEP FOOL!",
 
         "Script": "high\n"
     }

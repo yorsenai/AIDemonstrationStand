@@ -81,18 +81,21 @@ class Module(SM.SuperModule):
 
     def showResult(self):
         if self.demonstration_type == "attack":
-                if "мужчина" in self.parameters['param0']:
-                    text = "\t[*] Woman : 97%\n\t[*] Man : 2%\n\t[*] Not Human : 1%\n"
-                else:
-                    text = "\t[*] Woman : 2%\n\t[*] Man : 97%\n\t[*] Not Human : 1%\n"
-                self.changeScriptText(text)
+            if "мужчина" in self.parameters['param0']:
+                text = "<br>[*] Man : 2%<p style='color:#FF0000';>[*] Woman : 97%</p>[*] Not Human : 1%<br>"
+            else:
+                text = "<br>[*] Woman : 2%<p style='color:#FF0000';>[*] Man : 97%</p>[*] Not Human : 1%<br>"
+            #self.changeScriptText(text)
+            self.ScriptTextPlate.insertHtml(text)
+
 
         else:
             if not ("мужчина" in self.parameters['param0']):
-                text = "\t[*] Woman : 97%\n\t[*] Man : 2%\n\t[*] Not Human : 1%\n"
+                text = "<br>[*] Man : 2%<p style='color:#00FF00';>[*] Woman : 97%</p>[*] Not Human : 1%<br>"
             else:
-                text = "\t[*] Woman : 2%\n\t[*] Man : 97%\n\t[*] Not Human : 1%\n"
-            self.changeScriptText(text)
+                text = "<br>[*] Woman : 2%<p style='color:#00FF00';>[*] Man : 97%</p>[*] Not Human : 1%<br>"
+            #self.changeScriptText(text)
+            self.ScriptTextPlate.insertHtml(text)
 
     def cleanup(self):
         for filename in os.listdir(os.path.join(self.cwd, "pics")):

@@ -168,7 +168,7 @@ class DemonstrationApp(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         
-        self.setWindowTitle("Демонстрационный стенд \"Искусственный интеллект\"")
+        self.setWindowTitle("Модуль визуализации")
 
         try:
             # Включите в блок try/except, если вы также нацелены на Mac/Linux
