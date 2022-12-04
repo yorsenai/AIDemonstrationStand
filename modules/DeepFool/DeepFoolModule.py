@@ -27,13 +27,13 @@ def gauss_noise(image, mean=0, var=0.001):
 
 
 
-class CNNDialog(object):
+class SVMDialog(object):
     def setupUi(self, Dialog, overall_path : str):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(1060, 400)
+        Dialog.resize(500, 400)
 
         self.labelImage = QtWidgets.QLabel(Dialog)
-        self.labelImage.setGeometry(QtCore.QRect(370, 5, 320, 30))
+        self.labelImage.setGeometry(QtCore.QRect(90, 5, 320, 30))
         self.labelImage.setAlignment(QtCore.Qt.AlignCenter)
         self.labelImage.setObjectName("label")
         myFont=QtGui.QFont()
@@ -42,10 +42,10 @@ class CNNDialog(object):
         self.labelImage.setFont(myFont)
 
 
-        self.imageCNN = QtWidgets.QLabel(Dialog)
-        self.imageCNN.setGeometry(QtCore.QRect(10, 40, 1040, 320))
-        self.imageCNN.setObjectName("imageCNN")
-        self.imageCNN.setPixmap(QtGui.QPixmap(overall_path + "\\CNN.png").scaled(1040, 320))
+        self.imageSVM = QtWidgets.QLabel(Dialog)
+        self.imageSVM.setGeometry(QtCore.QRect(50, 40, 1040, 320))
+        self.imageSVM.setObjectName("imageSVM")
+        self.imageSVM.setPixmap(QtGui.QPixmap(overall_path + "\\SVM.png").scaled(400, 350))
 
 
         self.retranslateUi(Dialog)
@@ -53,7 +53,7 @@ class CNNDialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        self.labelImage.setText(_translate("Dialog", "Схема работы CNN"))
+        self.labelImage.setText(_translate("Dialog", "Гиперплоскость SVM"))
 
 
 def noiseattack(image : str, level : str = "low"):
@@ -115,27 +115,29 @@ class Module(SM.SuperModule):
     
     def ExecuteDemoDialog(self, _):
         dialog_app = QtWidgets.QDialog()
-        DialogWindow = CNNDialog()
+        DialogWindow = SVMDialog()
         DialogWindow.setupUi(dialog_app, self.cwd + "\\pics")
         dialog_app.exec()
 
     def showResult(self):
         if self.demonstration_type == "attack":
             if "мужчина" in self.parameters['param1']:
-                text = "<br>[*] Man : 2%<p style='color:#FF0000';>[*] Woman : 97%</p>[*] Not Human : 1%<br>"
+                text = "<br>[*] Man : 3%<p style='color:#FF0000';>[*] Woman : 97%</p>>"
             else:
-                text = "<br>[*] Woman : 2%<p style='color:#FF0000';>[*] Man : 97%</p>[*] Not Human : 1%<br>"
+                text = "<br>[*] Woman : 3%<p style='color:#FF0000';>[*] Man : 97%</p>"
             #self.changeScriptText(text)
-            self.ScriptTextPlate.insertHtml(text)
+            if not "Woman" in self.ScriptTextPlate.toPlainText():
+                self.ScriptTextPlate.insertHtml(text)
 
 
         else:
             if not ("мужчина" in self.parameters['param1']):
-                text = "<br>[*] Man : 2%<p style='color:#00FF00';>[*] Woman : 97%</p>[*] Not Human : 1%<br>"
+                text = "<br>[*] Man : 3%<p style='color:#00FF00';>[*] Woman : 97%</p>"
             else:
-                text = "<br>[*] Woman : 2%<p style='color:#00FF00';>[*] Man : 97%</p>[*] Not Human : 1%<br>"
+                text = "<br>[*] Woman : 3%<p style='color:#00FF00';>[*] Man : 97%</p>"
             #self.changeScriptText(text)
-            self.ScriptTextPlate.insertHtml(text)
+            if not "Woman" in self.ScriptTextPlate.toPlainText():
+                self.ScriptTextPlate.insertHtml(text)
 
     def cleanup(self):
         for filename in os.listdir(os.path.join(self.cwd, "pics")):

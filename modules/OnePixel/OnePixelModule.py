@@ -1,6 +1,7 @@
 import os
 import common.lib.SuperModule as SM
 from PyQt5.QtWidgets import QComboBox
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from PIL import Image
 from random import randint
@@ -30,6 +31,38 @@ def onepixattack(image : str):
 
 
 
+
+class CNNDialog(object):
+    def setupUi(self, Dialog, overall_path : str):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(1060, 400)
+
+        self.labelImage = QtWidgets.QLabel(Dialog)
+        self.labelImage.setGeometry(QtCore.QRect(370, 5, 320, 30))
+        self.labelImage.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelImage.setObjectName("label")
+        myFont=QtGui.QFont()
+        myFont.setBold(True)
+        myFont.setPointSize(14)
+        self.labelImage.setFont(myFont)
+
+
+        self.imageCNN = QtWidgets.QLabel(Dialog)
+        self.imageCNN.setGeometry(QtCore.QRect(10, 40, 1040, 320))
+        self.imageCNN.setObjectName("imageCNN")
+        self.imageCNN.setPixmap(QtGui.QPixmap(overall_path + "\\CNN.png").scaled(1040, 320))
+
+
+        self.retranslateUi(Dialog)
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self, Dialog):
+        _translate = QtCore.QCoreApplication.translate
+        self.labelImage.setText(_translate("Dialog", "Схема работы CNN"))
+
+
+
+
 def addParams():
     values =  ["собака", "птица", "кошка", "лошадь"]
     combobox = QComboBox()
@@ -54,8 +87,12 @@ class Module(SM.SuperModule):
             self.ExecuteDemoScript(
                 action['Script']
             )
+        elif action.get("DialogWindow"):
+            self.ExecuteDemoDialog(
+                action["DialogWindow"]
+            )
     
-    def ExecuteDemoScript(self, in_data : str):
+    def ExecuteDemoScript(self, _ : str):
         try:
             if onepixattack(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png")):
                 self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + "_out.png"))
@@ -63,15 +100,26 @@ class Module(SM.SuperModule):
             if onepixattack(os.path.join(self.cwd,  "pics", "собака.png")):
                 self.changePicture(os.path.join(self.cwd,  "pics", "собака_out.png"))
     
+    def ExecuteDemoDialog(self, _):
+        dialog_app = QtWidgets.QDialog()
+        DialogWindow = CNNDialog()
+        DialogWindow.setupUi(dialog_app, self.cwd + "\\pics")
+        dialog_app.exec()
+    
     def showResult(self):
         if self.demonstration_type == "attack":
             l = ["собака", "птица", "кошка", "лошадь"]
             l.remove(self.parameters['param1'])
             #self.changeScriptText("(" + l[0] + ")")
-            self.ScriptTextPlate.insertPlainText(l[0])
+            text = "<p style='color:#FF0000';>" + l[0] + "</p>"
+            if not l[0] in self.ScriptTextPlate.toPlainText():
+                self.ScriptTextPlate.insertHtml(text)
         else:
             #self.changeScriptText(self.parameters['param1'])
-            self.ScriptTextPlate.insertPlainText(self.parameters['param1'])
+            #self.ScriptTextPlate.insertPlainText(self.parameters['param1'])
+            text = "<p style='color:#00FF00';>" + self.parameters['param1'] + "</p>"
+            if not self.parameters['param1'] in self.ScriptTextPlate.toPlainText():
+                self.ScriptTextPlate.insertHtml(text)
 
     def cleanup(self):
         for filename in os.listdir(os.path.join(self.cwd, "pics")):
