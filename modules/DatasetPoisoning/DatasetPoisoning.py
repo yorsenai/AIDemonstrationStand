@@ -50,8 +50,6 @@ class SignDialog(object):
         self.label.setObjectName("label")
 
 
-
-
         self.frameSPEED = QtWidgets.QFrame(Dialog)
         self.frameSPEED.setGeometry(QtCore.QRect(470, 30, 400, 360))
         self.frameSPEED.setMinimumSize(QtCore.QSize(400, 360))
@@ -198,9 +196,13 @@ class Module(SM.SuperModule):
 
     def showResult(self):
         if self.demonstration_type == "attack":
-            self.ScriptTextPlate.insertPlainText("Знак Ограничение скорости")
+            #self.ScriptTextPlate.insertPlainText("Знак Ограничение скорости")
+            text = "<p style='color:#FF0000';> Знак Ограничение скорости </p>"
+            self.insertResultHtml(check = "Знак", text = text)
             #self.changeScriptText("(Ограничение скорости)")
         else:
-            self.ScriptTextPlate.insertPlainText("Знак Стоп")
+            #self.ScriptTextPlate.insertPlainText("Знак Стоп")
+            text = "<p style='color:#00FF00';> Знак Стоп </p>"
+            self.insertResultHtml(check = "Знак", text = text)
             #self.changeScriptText("(Стоп)")
         

@@ -72,7 +72,10 @@ class SuperModule(QFrame):
     def changeScriptText(self, text : str):
         if(self.ScriptTextPlate.toPlainText().find(text) < 0):
             self.ScriptTextPlate.append(text)
-            #self.ScriptTextPlate.insertPlainText(text)
+    
+    def insertResultHtml(self, check : str, text : str):
+        if not check in self.ScriptTextPlate.toPlainText():
+            self.ScriptTextPlate.insertHtml(text)
     
     def executeAction(self, action):
         if action.get('MessageBox'):

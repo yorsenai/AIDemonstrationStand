@@ -138,6 +138,7 @@ class FrameMenu(QtWidgets.QFrame):
             for i in reversed(range(self.extraParamsLayout.count())): 
                 self.extraParamsLayout.itemAt(i).widget().setParent(None)
             try:
+                module.addParams()
                 label = QtWidgets.QLabel()
                 label.setText("Входные данные:")
                 self.addParameter(label)

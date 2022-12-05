@@ -61,8 +61,6 @@ class CNNDialog(object):
         self.labelImage.setText(_translate("Dialog", "Схема работы CNN"))
 
 
-
-
 def addParams():
     values =  ["собака", "птица", "кошка", "лошадь"]
     combobox = QComboBox()
@@ -112,14 +110,16 @@ class Module(SM.SuperModule):
             l.remove(self.parameters['param1'])
             #self.changeScriptText("(" + l[0] + ")")
             text = "<p style='color:#FF0000';>" + l[0] + "</p>"
-            if not l[0] in self.ScriptTextPlate.toPlainText():
-                self.ScriptTextPlate.insertHtml(text)
+            # if not l[0] in self.ScriptTextPlate.toPlainText():
+            #     self.ScriptTextPlate.insertHtml(text)
+            self.insertResultHtml(check = l[0], text = text)
         else:
             #self.changeScriptText(self.parameters['param1'])
             #self.ScriptTextPlate.insertPlainText(self.parameters['param1'])
             text = "<p style='color:#00FF00';>" + self.parameters['param1'] + "</p>"
-            if not self.parameters['param1'] in self.ScriptTextPlate.toPlainText():
-                self.ScriptTextPlate.insertHtml(text)
+            # if not self.parameters['param1'] in self.ScriptTextPlate.toPlainText():
+            #     self.ScriptTextPlate.insertHtml(text)
+            self.insertResultHtml(check = self.parameters['param1'], text = text)
 
     def cleanup(self):
         for filename in os.listdir(os.path.join(self.cwd, "pics")):

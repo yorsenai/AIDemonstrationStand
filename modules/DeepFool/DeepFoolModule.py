@@ -126,8 +126,9 @@ class Module(SM.SuperModule):
             else:
                 text = "<br>[*] Woman : 3%<p style='color:#FF0000';>[*] Man : 97%</p>"
             #self.changeScriptText(text)
-            if not "Woman" in self.ScriptTextPlate.toPlainText():
-                self.ScriptTextPlate.insertHtml(text)
+            # if not "Woman" in self.ScriptTextPlate.toPlainText():
+            #     self.ScriptTextPlate.insertHtml(text)
+            self.insertResultHtml(check = "Woman", text = text)
 
 
         else:
@@ -136,8 +137,9 @@ class Module(SM.SuperModule):
             else:
                 text = "<br>[*] Woman : 3%<p style='color:#00FF00';>[*] Man : 97%</p>"
             #self.changeScriptText(text)
-            if not "Woman" in self.ScriptTextPlate.toPlainText():
-                self.ScriptTextPlate.insertHtml(text)
+            # if not "Woman" in self.ScriptTextPlate.toPlainText():
+            #     self.ScriptTextPlate.insertHtml(text)
+            self.insertResultHtml(check = "Woman", text = text)
 
     def cleanup(self):
         for filename in os.listdir(os.path.join(self.cwd, "pics")):
