@@ -32,6 +32,7 @@ def onepixattack(image : str):
 
 
 
+
 class CNNDialog(object):
     def setupUi(self, Dialog, overall_path : str):
         Dialog.setObjectName("Dialog")
@@ -49,8 +50,8 @@ class CNNDialog(object):
 
         self.imageCNN = QtWidgets.QLabel(Dialog)
         self.imageCNN.setGeometry(QtCore.QRect(10, 40, 1040, 320))
-        self.imageCNN.setObjectName("imageCNN")
-        self.imageCNN.setPixmap(QtGui.QPixmap(overall_path + "\\CNN.png").scaled(1040, 320))
+        self.imageCNN.setObjectName("imageCNN")        
+        self.imageCNN.setPixmap(QtGui.QPixmap(os.path.join(overall_path, "CNN.png")).scaled(1040, 320))
 
 
         self.retranslateUi(Dialog)
@@ -90,13 +91,22 @@ class Module(SM.SuperModule):
                 action["DialogWindow"]
             )
     
-    def ExecuteDemoScript(self, _ : str):
-        try:
-            if onepixattack(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png")):
-                self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + "_out.png"))
-        except:
-            if onepixattack(os.path.join(self.cwd,  "pics", "собака.png")):
-                self.changePicture(os.path.join(self.cwd,  "pics", "собака_out.png"))
+    def ExecuteDemoScript(self, scriptname : str):
+        if scriptname == "Bayes.png":                   
+            self.changePicture(os.path.join(self.cwd,  "pics", scriptname))  
+        elif scriptname == "choice":
+            try:
+                self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png"))
+            except:
+                self.changePicture(os.path.join(self.cwd,  "pics", "собака.png")) 
+        else:
+
+            try:
+                if onepixattack(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png")):
+                    self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + "_out.png"))
+            except:
+                if onepixattack(os.path.join(self.cwd,  "pics", "собака.png")):
+                    self.changePicture(os.path.join(self.cwd,  "pics", "собака_out.png"))
     
     def ExecuteDemoDialog(self, _):
         dialog_app = QtWidgets.QDialog()
