@@ -34,11 +34,11 @@ class FrameMenu(QtWidgets.QFrame):
         self.radioButtonStandard.clicked.connect(self.radioClicked)
         self.radioButtonStandard.setChecked(True)
 
-        self.radioButtonAttack = QRadioButton("Атака")
+        self.radioButtonAttack = QRadioButton("Угроза")
         self.radioButtonAttack.resize(150,25)
         self.radioButtonAttack.clicked.connect(self.radioClicked)
 
-        self.radioButtonAttackDefense = QRadioButton("Атака + Защита")
+        self.radioButtonAttackDefense = QRadioButton("Угроза + Защита")
         self.radioButtonAttackDefense.resize(150,25)
         self.radioButtonAttackDefense.clicked.connect(self.radioClicked)
 
@@ -88,8 +88,6 @@ class FrameMenu(QtWidgets.QFrame):
                 if confData["moduleCategory"] not in categories.keys():
                     categories[confData["moduleCategory"]] = []
                 categories[confData["moduleCategory"]].append(confData)
-        # print(categories.keys())
-        # categories
 
         
         
@@ -210,8 +208,6 @@ class DemonstrationApp(QtWidgets.QMainWindow):
                 parameters = self.frameMenu.parameters
         )
 
-        # ПОТОМ НАДО ВСЕ ЭТО В parameters ЗАПИХНУТЬ 
-        # составляющие parameters свои для каждого preview класса
         self.setCentralWidget(cm.demoFrame)
         
 
