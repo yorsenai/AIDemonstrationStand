@@ -4,9 +4,8 @@ from PyQt5.QtWidgets import QComboBox
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from PIL import Image
-from random import randint
 
-def onepixattack(image : str):
+def JSMattack(image : str):
 	try:
 		im = Image.open(image)
 		pixelMap = im.load()
@@ -17,7 +16,9 @@ def onepixattack(image : str):
 		for i in range(img.size[0]):
 			for j in range(img.size[1]):
 				pixelsNew[i,j] = pixelMap[i,j]
-		pixelsNew[randint(10, 18), randint(10, 18)] = (255,0,0,255)
+		pixelsNew[11, 13] = (255,0,0,255)
+		pixelsNew[13, 15] = (255,0,0,255)
+		pixelsNew[15, 11] = (255,0,0,255)
 
 
 		im.close()
@@ -33,33 +34,33 @@ def onepixattack(image : str):
 
 
 
-class CNNDialog(object):
+class BayesDialog(object):
     def setupUi(self, Dialog, overall_path : str):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(1060, 400)
+        Dialog.resize(380, 380)
 
         self.labelImage = QtWidgets.QLabel(Dialog)
-        self.labelImage.setGeometry(QtCore.QRect(370, 5, 320, 30))
+        self.labelImage.setGeometry(QtCore.QRect(20, 5, 340, 30))
         self.labelImage.setAlignment(QtCore.Qt.AlignCenter)
         self.labelImage.setObjectName("label")
         myFont=QtGui.QFont()
         myFont.setBold(True)
-        myFont.setPointSize(14)
+        myFont.setPointSize(12)
         self.labelImage.setFont(myFont)
 
 
         self.imageCNN = QtWidgets.QLabel(Dialog)
-        self.imageCNN.setGeometry(QtCore.QRect(10, 40, 1040, 320))
-        self.imageCNN.setObjectName("imageCNN")        
-        self.imageCNN.setPixmap(QtGui.QPixmap(os.path.join(overall_path, "CNN.png")).scaled(1040, 320))
+        self.imageCNN.setGeometry(QtCore.QRect(30, 40, 320, 320))
+        self.imageCNN.setObjectName("imageBayes")        
+        self.imageCNN.setPixmap(QtGui.QPixmap(os.path.join(overall_path, "Bayes.png")).scaled(320, 320))
 
 
-        self.retranslateUi(Dialog)
+        self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self):
         _translate = QtCore.QCoreApplication.translate
-        self.labelImage.setText(_translate("Dialog", "Схема работы CNN"))
+        self.labelImage.setText(_translate("Dialog", "Формула условной вероятности"))
 
 
 def addParams():
@@ -72,7 +73,7 @@ class Module(SM.SuperModule):
     def __init__(self, demonstration_type : str, slides, parent = None, parameters = None) -> None:
         super().__init__(demonstration_type = demonstration_type, slides = slides, parent = parent, parameters = parameters)
         self.parameters["param1"]
-        self.cwd = os.path.join("modules", "OnePixel")
+        self.cwd = os.path.join("modules", "JSM")
         try:
             self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png"))
         except:
@@ -91,26 +92,17 @@ class Module(SM.SuperModule):
                 action["DialogWindow"]
             )
     
-    def ExecuteDemoScript(self, scriptname : str):
-        if scriptname == "Bayes.png":                   
-            self.changePicture(os.path.join(self.cwd,  "pics", scriptname))  
-        elif scriptname == "choice":
-            try:
-                self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png"))
-            except:
-                self.changePicture(os.path.join(self.cwd,  "pics", "собака.png")) 
-        else:
-
-            try:
-                if onepixattack(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png")):
-                    self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + "_out.png"))
-            except:
-                if onepixattack(os.path.join(self.cwd,  "pics", "собака.png")):
-                    self.changePicture(os.path.join(self.cwd,  "pics", "собака_out.png"))
+    def ExecuteDemoScript(self, _):
+        try:
+            if JSMattack(os.path.join(self.cwd,  "pics", self.parameters["param1"] + ".png")):
+                self.changePicture(os.path.join(self.cwd,  "pics", self.parameters["param1"] + "_out.png"))
+        except:
+            if JSMattack(os.path.join(self.cwd,  "pics", "собака.png")):
+                self.changePicture(os.path.join(self.cwd,  "pics", "собака_out.png"))
     
     def ExecuteDemoDialog(self, _):
         dialog_app = QtWidgets.QDialog()
-        DialogWindow = CNNDialog()
+        DialogWindow = BayesDialog()
         DialogWindow.setupUi(dialog_app, self.cwd + "\\pics")
         dialog_app.exec()
     
@@ -118,17 +110,10 @@ class Module(SM.SuperModule):
         if self.demonstration_type == "attack":
             l = ["собака", "птица", "кошка", "лошадь"]
             l.remove(self.parameters['param1'])
-            #self.changeScriptText("(" + l[0] + ")")
             text = "<p style='color:#FF0000';>" + l[0] + "</p>"
-            # if not l[0] in self.ScriptTextPlate.toPlainText():
-            #     self.ScriptTextPlate.insertHtml(text)
             self.insertResultHtml(check = l[0], text = text)
         else:
-            #self.changeScriptText(self.parameters['param1'])
-            #self.ScriptTextPlate.insertPlainText(self.parameters['param1'])
             text = "<p style='color:#00FF00';>" + self.parameters['param1'] + "</p>"
-            # if not self.parameters['param1'] in self.ScriptTextPlate.toPlainText():
-            #     self.ScriptTextPlate.insertHtml(text)
             self.insertResultHtml(check = self.parameters['param1'], text = text)
 
     def cleanup(self):
