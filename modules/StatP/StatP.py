@@ -169,7 +169,33 @@ class SignDialog(object):
         self.labelParking.setText(_translate("Dialog", "ПАРКОВКА ЗАПРЕЩЕНА"))
         self.labelDataSet.setText(_translate("Dialog", "Обучающий набор данных"))
 
+class SVMDialog(object):
+    def setupUi(self, Dialog, overall_path : str):
+        Dialog.setObjectName("Dialog")
+        Dialog.resize(730, 600)
 
+        self.labelImage = QtWidgets.QLabel(Dialog)
+        self.labelImage.setGeometry(QtCore.QRect(20, 5, 671, 30))
+        self.labelImage.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelImage.setObjectName("label")
+        myFont=QtGui.QFont()
+        myFont.setBold(True)
+        myFont.setPointSize(12)
+        self.labelImage.setFont(myFont)
+
+
+        self.imageCNN = QtWidgets.QLabel(Dialog)
+        self.imageCNN.setGeometry(QtCore.QRect(30, 40, 671, 526))
+        self.imageCNN.setObjectName("imageSVM")        
+        self.imageCNN.setPixmap(QtGui.QPixmap(os.path.join(overall_path, "SVM.png")).scaled(671, 526))
+
+
+        self.retranslateUi()
+        QtCore.QMetaObject.connectSlotsByName(Dialog)
+
+    def retranslateUi(self):
+        _translate = QtCore.QCoreApplication.translate
+        self.labelImage.setText(_translate("Dialog", "Пример разделяющей гиперплоскости"))
 
 class Module(SM.SuperModule):
     def __init__(self, demonstration_type : str, slides, parent = None, parameters = None) -> None:
@@ -188,10 +214,16 @@ class Module(SM.SuperModule):
             )
     
     def ExecuteDemoDialog(self, in_data : str):
-        dialog_app = QtWidgets.QDialog()
-        DialogWindow = SignDialog()
-        DialogWindow.setupUi(dialog_app, self.cwd + "\\pics", in_data)
-        dialog_app.exec()
+        if in_data == "SVM":
+            dialog_app = QtWidgets.QDialog()
+            DialogWindow = SVMDialog()
+            DialogWindow.setupUi(dialog_app, os.path.join(self.cwd, "pics"))
+            dialog_app.exec()
+        else:
+            dialog_app = QtWidgets.QDialog()
+            DialogWindow = SignDialog()
+            DialogWindow.setupUi(dialog_app, os.path.join(self.cwd, "pics"), in_data)
+            dialog_app.exec()
     
 
     def showResult(self):

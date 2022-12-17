@@ -3,5 +3,7 @@
 
     "script": "[!] STAGE 1: Building dividing lines...",
 
-    "action": {}
+    "action": {
+        "DialogWindow": "normal"
+    }
 }
