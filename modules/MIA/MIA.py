@@ -345,13 +345,11 @@ class Module(SM.SuperModule):
     
 
     def showResult(self):
-        if self.demonstration_type == "defense":
-            l = ["европеоид", "монголоид", "негроид"]
-            l.remove(self.parameters['param1'])
-            text = "<p style='color:#FF0000';>" + l[0] + "</p>"
-            self.insertResultHtml(check = l[0], text = text)
+        if self.demonstration_type == "protect":
+            text = "<p style='color:#FF0000';> NOT PRESENTED (97%) </p>"
+            self.insertResultHtml(check = self.parameters['param1'], text = text)
         elif self.demonstration_type == "attack":
-            text = "<p style='color:#00FF00';>" + self.parameters['param1'] + ": 0.963" + "</p>"
+            text = "<p style='color:#00FF00';> PRESENTED (96%) </p>"
             self.insertResultHtml(check = self.parameters['param1'], text = text)
         else:
             text = "<p style='color:#00FF00';>" + self.parameters['param1'] + "</p>"
