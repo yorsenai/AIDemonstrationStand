@@ -204,7 +204,7 @@ class DemonstrationApp(QtWidgets.QMainWindow):
         cm = module.Module(
                 parent = self,
                 demonstration_type = self.frameMenu.parameters["demonstration_type"], 
-                slides = current_module["slides"]["normal"], 
+                slides = current_module["slides"][self.frameMenu.parameters["demonstration_type"]], 
                 parameters = self.frameMenu.parameters
         )
 
