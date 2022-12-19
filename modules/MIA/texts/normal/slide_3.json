@@ -4,6 +4,6 @@
     "script": "",
 
     "action": {
-        "DialogWindow": "_"
+        "DialogWindow": "LSTM"
     }
 }
