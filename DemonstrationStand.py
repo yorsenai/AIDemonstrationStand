@@ -124,6 +124,21 @@ class FrameMenu(QtWidgets.QFrame):
             self.labelModuleDescription.setText(module["description"])
             self.currentModule = module
             
+            try:                
+                if "attack" in module["hideMode"]:
+                    self.radioButtonAttack.hide()
+                else:
+                    self.radioButtonAttack.show()
+
+                if "protect" in module["hideMode"]:
+                    self.radioButtonAttackDefense.hide()
+                else:
+                    self.radioButtonAttackDefense.show()
+            except:
+                self.radioButtonAttack.show()
+                self.radioButtonAttackDefense.show()
+            
+
             current_module = module
             modulePath = os.path.join(os.getcwd(), "modules", current_module["moduleName"], current_module["scriptPath"])
 
@@ -136,16 +151,16 @@ class FrameMenu(QtWidgets.QFrame):
             for i in reversed(range(self.extraParamsLayout.count())): 
                 self.extraParamsLayout.itemAt(i).widget().setParent(None)
             try:
-                module.addParams()
+                values = module.addParams()
                 label = QtWidgets.QLabel()
                 label.setText("Входные данные:")
                 self.addParameter(label)
-                for param in module.addParams():
+                for param in values:
                     self.addParameter(param)
             except:
                 pass
 
-
+            
     def getCategoryByName(self, name):
         for category in self.categories:
             if category["categoryName"] == name:
