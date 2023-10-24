@@ -57,7 +57,7 @@
     - Класс атаки: Исследование
     - Вид атаки: Membership Inference Attack (MIA)
     - Вид защиты: Distillation for Membership Privacy (DMP)
-6. Model Extracting ?
+6. Model Extracting
     - Модель ИИ: Регрессия Лассо
     - Класс атаки: Исследование
     - Вид атаки: Hyperparameter extraction 
